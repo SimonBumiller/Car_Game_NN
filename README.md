@@ -1,4 +1,4 @@
-# Unity Car game, using Neural Networks
+# Controlling a Unity car-game using neural networks & evolutionary processes
 ## Inspiration
 This project was highly inspired and influenced by ['Samuel Arzt - Applying Evolutionary Artificial Neural Networks'](https://github.com/ArztSamuel/Applying_EANNs).
 
