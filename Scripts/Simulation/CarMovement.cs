@@ -18,7 +18,7 @@ public class CarMovement : MonoBehaviour
 
     private bool UserControlled;
 
-    private float Velocity;
+    public float Velocity;
 
     public void Reset()
     {

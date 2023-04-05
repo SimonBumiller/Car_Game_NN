@@ -73,10 +73,11 @@ public class CarController : MonoBehaviour
         if (!UserControlled &
             (Agent != null)) //Agent null-check because start car doesnt have one. TODO: Fix this, disable start car.
         {
-            var sensorData = new float[Sensors.Length];
-            for (var i = 0; i < Sensors.Length; i++) sensorData[i] = Sensors[i].Output;
+            var data = new float[Sensors.Length + 1];
+            for (var i = 0; i < Sensors.Length; i++) data[i] = Sensors[i].Output;
+            data[^1] = Movement.Velocity;
 
-            var controls = Agent.Process(sensorData);
+            var controls = Agent.Process(data);
             Movement.SetInputs(controls);
         }
 
