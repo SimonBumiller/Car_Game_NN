@@ -11,8 +11,8 @@ using UnityEngine;
 public class Sensor : MonoBehaviour
 {
     // Max and min readings
-    private const float MAX_DIST = 10F;
-    private const float MIN_DIST = 0.01f;
+    private const float MAX_DIST = 1000F;
+    private const float MIN_DIST = 0.000001f;
     [SerializeField] private LayerMask LayerToSense;
 
     [SerializeField] private SpriteRenderer Cross;

@@ -24,7 +24,13 @@ public class Track : MonoBehaviour
         get => best;
         set
         {
-            if (best == value) return;
+            if (best == value) return; //Same car is still best
+            if (value == null)
+            {
+                best = null;
+                return;
+            }
+
             if (best != null && best.Controller.enabled) //Janky but all we can do!
                 best.Controller.Renderer.sprite = NormalCar;
 
@@ -129,7 +135,7 @@ public class Track : MonoBehaviour
 
     private void OnCarDie(CarController car)
     {
-        if (Best.Controller == car) Best = null;
+        if (Best == null || Best.Controller == car) Best = null;
     }
 
     /// <summary>
