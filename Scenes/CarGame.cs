@@ -16,6 +16,7 @@ public class CarGame : MonoBehaviour
 
     void Awake()
     {
+        SceneManager.LoadScene("GUI", LoadSceneMode.Additive);
         SceneManager.LoadScene(TrackName, LoadSceneMode.Additive);
     }
 
@@ -28,5 +29,6 @@ public class CarGame : MonoBehaviour
     private void OnBestCarChange(CarController controller)
     {
         Camera.target = controller.transform;
+        CarInfoController.Instance.Car = controller;
     }
 }

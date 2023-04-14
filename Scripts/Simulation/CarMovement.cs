@@ -7,12 +7,12 @@ using UnityEngine.Assertions;
 
 public class CarMovement : MonoBehaviour
 {
-    private const float MaxVel = 20f;
-    private const float Acceleration = 16f;
-    private const float Friction = 10f;
-    private const float TurnSpeed = 100;
+    public const float MaxVel = 20f;
+    public const float Acceleration = 16f;
+    public const float Friction = 10f;
+    public const float TurnSpeed = 100;
 
-    private double horizontalInput, verticalInput; //Horizontal = engine force, Vertical = turning force
+    public double horizontalInput, verticalInput; //Horizontal = engine force, Vertical = turning force
 
     private Quaternion Rotation;
 

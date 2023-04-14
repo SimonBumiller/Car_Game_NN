@@ -16,7 +16,7 @@ public class CarController : MonoBehaviour
     public int id;
     private float lastCheckpointTime;
 
-    private CarMovement Movement;
+    public CarMovement Movement;
     private Sensor[] Sensors;
 
     /// <summary>

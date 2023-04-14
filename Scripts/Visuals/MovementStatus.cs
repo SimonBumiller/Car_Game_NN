@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 public class Movement
 {
@@ -47,7 +48,7 @@ public class Movement
         throw new NotImplementedException("No name implemented for Speed '" + s + "'");
     }
 
-    private class AccelerationHelper
+    public class AccelerationHelper
     {
         public static Acceleration from(float input)
         {
@@ -55,15 +56,15 @@ public class Movement
         }
     }
 
-    private class Speedhelper
+    public class Speedhelper
     {
         public static Speed from(float speed, float maxSpeed, float minSpeed)
         {
             if (speed == 0) return Speed.Still;
             if (speed > maxSpeed / 2) return Speed.FastForward;
-            if (speed < maxSpeed / 2 && speed < 0) return Speed.SlowForward;
+            if (speed < maxSpeed / 2 && speed > 0) return Speed.SlowForward;
             if (speed < minSpeed / 2) return Speed.FastBackwards;
-            if (speed > minSpeed / 2 && speed > 0) return Speed.SlowBackwards;
+            if (speed > minSpeed / 2 && speed < 0) return Speed.SlowBackwards;
 
             throw new ArgumentException("No Speed can be found found for max = " + maxSpeed + " min = " +
                                         minSpeed + " current = " + speed);

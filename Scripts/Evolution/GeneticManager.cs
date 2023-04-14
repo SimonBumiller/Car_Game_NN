@@ -12,8 +12,8 @@ public class GeneticManager : MonoBehaviour
 
     private readonly List<Agent> Agents = new();
 
-    private GeneticAlgorithm GeneticAlgorithm;
-    private int LivingAgents;
+    public GeneticAlgorithm GeneticAlgorithm;
+    public int LivingAgents;
 
     private void Awake()
     {
@@ -58,6 +58,7 @@ public class GeneticManager : MonoBehaviour
             LivingAgents++;
             Agents[i].OnAgentDie += AgentDie;
         }
+        Debug.Log("Got LivingAgents: " + LivingAgents);
 
         Track.Instance.Restart();
     }
