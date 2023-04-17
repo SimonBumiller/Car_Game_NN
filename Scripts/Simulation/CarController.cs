@@ -7,17 +7,20 @@ public class CarController : MonoBehaviour
 
     public static readonly int MAX_CHECKPOINT_DELAY = 5;
 
+    public Material NormalMaterial;
+    public Material DisabledMaterial;
+    public Material BestMaterial;
+
     [SerializeField] private bool UserControlled;
-    [SerializeField] private Sprite DisabledSprite;
-    [SerializeField] private Sprite NormalSprite;
     [SerializeField] private bool ShowCrosses = true;
     [SerializeField] private bool ShowLines = true;
-    public SpriteRenderer Renderer;
+    public Renderer Renderer;
     public int id;
     private float lastCheckpointTime;
 
     public CarMovement Movement;
     private Sensor[] Sensors;
+    private Vector3[] InitialSensorPositions;
 
     /// <summary>
     ///     Returns the next unique id in the sequence.
@@ -36,10 +39,19 @@ public class CarController : MonoBehaviour
     private void Awake()
     {
         Movement = GetComponent<CarMovement>();
-        Renderer = GetComponent<SpriteRenderer>();
+        Renderer = GetComponent<MeshRenderer>();
         Sensors = GetComponentsInChildren<Sensor>();
         transform.position.Normalize();
         id = NextID;
+
+        var pos = transform.position;
+
+        InitialSensorPositions = new Vector3[5];
+        InitialSensorPositions[0] = new Vector2(pos.x + 2, pos.y);
+        InitialSensorPositions[1] = new Vector2(pos.x + 1.3F, pos.y + 0.85F);
+        InitialSensorPositions[2] = new Vector2(pos.x + 1.3F, pos.y - 0.85F);
+        InitialSensorPositions[3] = new Vector2(pos.x + 0.5F, pos.y - 1.5F);
+        InitialSensorPositions[4] = new Vector2(pos.x + 0.5F, pos.y + 1.5F);
     }
 
     private void Start()
@@ -47,14 +59,14 @@ public class CarController : MonoBehaviour
         Movement.SetIsUserControlled(UserControlled);
 
         Movement.OnHitWall += Die;
-
-        var pos = transform.position;
-
-        Sensors[0].SetPosition(new Vector2(pos.x + 2, pos.y));
-        Sensors[1].SetPosition(new Vector2(pos.x + 1.3F, pos.y + 0.85F));
-        Sensors[2].SetPosition(new Vector2(pos.x + 1.3F, pos.y - 0.85F));
-        Sensors[3].SetPosition(new Vector2(pos.x + 0.5F, pos.y - 1.5F));
-        Sensors[4].SetPosition(new Vector2(pos.x + 0.5F, pos.y + 1.5F));
+        
+        for (int i = 0; i < Sensors.Length; i++)
+        {
+            if (i < InitialSensorPositions.Length)
+            {
+                Sensors[i].SetPosition(InitialSensorPositions[i]);
+            }
+        }
     }
 
     private void Update()
@@ -89,7 +101,6 @@ public class CarController : MonoBehaviour
 
     private void Die()
     {
-        Renderer.sprite = DisabledSprite;
         enabled = false;
         Movement.Die();
         foreach (var sensor in Sensors)
@@ -98,7 +109,10 @@ public class CarController : MonoBehaviour
             sensor.ShowLine = false;
         }
 
-        Agent.Kill();
+        Renderer.material = DisabledMaterial;
+
+        if(Agent != null)
+            Agent.Kill();
         if (OnDie != null) OnDie(this);
     }
 
@@ -110,7 +124,7 @@ public class CarController : MonoBehaviour
             sensor.ShowLine = true;
         }
 
-        Renderer.sprite = NormalSprite;
+        Renderer.material = NormalMaterial;
         enabled = true;
         Agent.Reset();
         Movement.Reset();

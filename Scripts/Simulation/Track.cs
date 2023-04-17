@@ -32,10 +32,10 @@ public class Track : MonoBehaviour
             }
 
             if (best != null && best.Controller.enabled) //Janky but all we can do!
-                best.Controller.Renderer.sprite = NormalCar;
+                best.Controller.Renderer.material = best.Controller.NormalMaterial;
 
             best = value;
-            best.Controller.Renderer.sprite = BestCar;
+            best.Controller.Renderer.material = best.Controller.BestMaterial;
             if (OnBestCarChange != null) OnBestCarChange(value.Controller);
         }
     }

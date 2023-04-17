@@ -12,6 +12,7 @@ public class CarMovement : MonoBehaviour
     public const float Friction = 10f;
     public const float TurnSpeed = 100;
 
+    public LayerMask WallLayer;
     public double horizontalInput, verticalInput; //Horizontal = engine force, Vertical = turning force
 
     private Quaternion Rotation;
@@ -34,10 +35,13 @@ public class CarMovement : MonoBehaviour
         ApplyFriction();
     }
 
-    private void OnCollisionEnter2D(Collision2D col)
+    private void OnCollisionEnter(Collision col)
     {
-        if (OnHitWall != null)
-            OnHitWall();
+        if ((WallLayer.value & (1 << col.collider.gameObject.layer)) > 0)
+        {
+            if (OnHitWall != null)
+                OnHitWall();
+        }
     }
 
     public event Action OnHitWall;
