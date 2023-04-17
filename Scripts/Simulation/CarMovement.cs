@@ -82,12 +82,12 @@ public class CarMovement : MonoBehaviour
 
         //Set rotation
         Rotation = transform.rotation;
-        Rotation *= Quaternion.AngleAxis((float)-horizontalInput * TurnSpeed * Time.deltaTime, new Vector3(0, 0, 1));
+        Rotation *= Quaternion.AngleAxis((float)horizontalInput * TurnSpeed * Time.deltaTime, Vector3.up);
     }
 
     private void ApplyVelocity()
     {
-        var direction = new Vector3(0, 1, 0);
+        var direction = Vector3.right;
         transform.rotation = Rotation;
         direction = Rotation * direction;
 
