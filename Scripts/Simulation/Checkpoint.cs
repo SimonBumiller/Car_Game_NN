@@ -29,7 +29,7 @@ public class Checkpoint : MonoBehaviour
 
     private SpriteRenderer Renderer;
 
-    public Vector2 Position
+    public Vector3 Position
     {
         get => Renderer.transform.position;
         private set => Renderer.transform.position = value;

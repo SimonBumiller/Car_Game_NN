@@ -17,8 +17,8 @@ public class CarLineRenderer : MonoBehaviour
     {
         if (LineRenderer != null)
         {
-            LineRenderer.SetPosition(0, Sensor.transform.position);
-            LineRenderer.SetPosition(1, Cross.transform.position);
+            LineRenderer.SetPosition(0, new Vector3(1, 1, 1));
+            LineRenderer.SetPosition(1, new Vector3(3, 3, 3));
         }
     }
 }

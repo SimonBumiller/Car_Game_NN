@@ -12,7 +12,6 @@ public class CarController : MonoBehaviour
     public Material BestMaterial;
 
     [SerializeField] private bool UserControlled;
-    [SerializeField] private bool ShowCrosses = true;
     [SerializeField] private bool ShowLines = true;
     public Renderer Renderer;
     public int id;
@@ -20,7 +19,7 @@ public class CarController : MonoBehaviour
 
     public CarMovement Movement;
     private Sensor[] Sensors;
-    private Vector3[] InitialSensorPositions;
+    private Vector3[] SensorRayDirections;
 
     /// <summary>
     ///     Returns the next unique id in the sequence.
@@ -41,17 +40,14 @@ public class CarController : MonoBehaviour
         Movement = GetComponent<CarMovement>();
         Renderer = GetComponent<MeshRenderer>();
         Sensors = GetComponentsInChildren<Sensor>();
-        transform.position.Normalize();
         id = NextID;
 
-        var pos = transform.position;
-
-        InitialSensorPositions = new Vector3[5];
-        InitialSensorPositions[0] = new Vector2(pos.x + 2, pos.y);
-        InitialSensorPositions[1] = new Vector2(pos.x + 1.3F, pos.y + 0.85F);
-        InitialSensorPositions[2] = new Vector2(pos.x + 1.3F, pos.y - 0.85F);
-        InitialSensorPositions[3] = new Vector2(pos.x + 0.5F, pos.y - 1.5F);
-        InitialSensorPositions[4] = new Vector2(pos.x + 0.5F, pos.y + 1.5F);
+        SensorRayDirections = new Vector3[5];
+        SensorRayDirections[0] = new Vector3(-1, 0, 0); //Forward
+        SensorRayDirections[1] = new Vector3(1, 0, 1); //Forward - Left
+        SensorRayDirections[2] = new Vector3(0, 0, 1); //Left
+        SensorRayDirections[3] = new Vector3(1, 0, -1); //Forward - Right
+        SensorRayDirections[4] = new Vector3(0, 0, -1); //Right
     }
 
     private void Start()
@@ -59,12 +55,13 @@ public class CarController : MonoBehaviour
         Movement.SetIsUserControlled(UserControlled);
 
         Movement.OnHitWall += Die;
-        
+
         for (int i = 0; i < Sensors.Length; i++)
         {
-            if (i < InitialSensorPositions.Length)
+            if (i < SensorRayDirections.Length)
             {
-                Sensors[i].SetPosition(InitialSensorPositions[i]);
+                Sensors[i].transform.position = Renderer.bounds.center;
+                Sensors[i].RayDirection = SensorRayDirections[i];
             }
         }
     }
@@ -73,15 +70,12 @@ public class CarController : MonoBehaviour
     {
         foreach (var sensor in Sensors)
         {
-            sensor.ShowCross = ShowCrosses;
             sensor.ShowLine = ShowLines;
         }
     }
 
     private void FixedUpdate()
     {
-        if (Agent == null) enabled = false;
-
         if (!UserControlled &
             (Agent != null)) //Agent null-check because start car doesnt have one. TODO: Fix this, disable start car.
         {
@@ -91,6 +85,15 @@ public class CarController : MonoBehaviour
 
             var controls = Agent.Process(data);
             Movement.SetInputs(controls);
+        }
+
+        for (int i = 0; i < Sensors.Length; i++)
+        {
+            if (i < SensorRayDirections.Length)
+            {
+                var newRot = Movement.Rotation * SensorRayDirections[i];
+                Sensors[i].RayDirection = newRot;
+            }
         }
 
         if (lastCheckpointTime > MAX_CHECKPOINT_DELAY) Die();
@@ -105,13 +108,12 @@ public class CarController : MonoBehaviour
         Movement.Die();
         foreach (var sensor in Sensors)
         {
-            sensor.ShowCross = false;
             sensor.ShowLine = false;
         }
 
         Renderer.material = DisabledMaterial;
 
-        if(Agent != null)
+        if (Agent != null)
             Agent.Kill();
         if (OnDie != null) OnDie(this);
     }
@@ -120,7 +122,6 @@ public class CarController : MonoBehaviour
     {
         foreach (var sensor in Sensors)
         {
-            sensor.ShowCross = true;
             sensor.ShowLine = true;
         }
 

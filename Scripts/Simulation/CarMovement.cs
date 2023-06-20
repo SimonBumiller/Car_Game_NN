@@ -14,8 +14,11 @@ public class CarMovement : MonoBehaviour
 
     public LayerMask WallLayer;
     public double horizontalInput, verticalInput; //Horizontal = engine force, Vertical = turning force
+    public bool IsGrounded;
 
-    private Quaternion Rotation;
+    private Collider Collider;
+
+    public Quaternion Rotation;
 
     private bool UserControlled;
 
@@ -26,12 +29,20 @@ public class CarMovement : MonoBehaviour
         enabled = true;
     }
 
+    private void Start()
+    {
+        Collider = GetComponent<Collider>();
+    }
+
     private void FixedUpdate()
     {
         if (UserControlled) ReadInput();
-
+        IsGrounded = Physics.Raycast(transform.position, -Vector3.up, 0.5F);
         ApplyInput();
-        ApplyVelocity();
+        if (IsGrounded)
+        {
+            ApplyVelocity();
+        }
         ApplyFriction();
     }
 

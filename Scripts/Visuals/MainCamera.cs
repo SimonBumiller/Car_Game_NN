@@ -4,16 +4,20 @@ public class MainCamera : MonoBehaviour
 {
     public Transform target;
 
-    public Vector3 offset;
+    public Vector3 Offset;
+
+    public Camera Camera;
+    public Light Light;
 
     private void LateUpdate()
     {
         if (target != null)
         {
-            var newPos = target.position + offset;
-            newPos.z = transform.position.z;
-
-            transform.position = newPos;
+            Camera.transform.position = target.transform.position + Offset;
+            Light.transform.position = target.transform.position + Offset;
         }
+        
+        Camera.transform.LookAt(target);
+        Light.transform.LookAt(target);
     }
 }

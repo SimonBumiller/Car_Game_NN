@@ -8,14 +8,14 @@ public class Track : MonoBehaviour
     public static Track Instance;
 
     [SerializeField] private CarController StartCar;
-    [SerializeField] private Sprite BestCar;
-    [SerializeField] private Sprite NormalCar;
+    [SerializeField] private Material BestCar;
+    [SerializeField] private Material NormalCar;
     public readonly List<TrackCar> Cars = new();
 
     private TrackCar best;
 
     private Checkpoint[] Checkpoints;
-    private Vector2 startPos;
+    private Vector3 startPos;
     private Quaternion startRot;
     private float TotalTrackLenght;
 
@@ -47,6 +47,7 @@ public class Track : MonoBehaviour
         var startTransform = StartCar.transform;
         startPos = startTransform.position;
         startRot = startTransform.rotation;
+        Debug.Log("Got start pos: " + startPos.ToString());
 
         Instance = this;
     }
@@ -149,7 +150,7 @@ public class Track : MonoBehaviour
 
         for (var i = 1; i < Checkpoints.Length; i++)
         {
-            Checkpoints[i].DistanceToLast = Vector2.Distance(Checkpoints[i].Position, Checkpoints[i - 1].Position);
+            Checkpoints[i].DistanceToLast = Vector3.Distance(Checkpoints[i].Position, Checkpoints[i - 1].Position);
             Checkpoints[i].TotalDistance = Checkpoints[i].DistanceToLast + Checkpoints[i - 1].TotalDistance;
         }
 
@@ -165,8 +166,6 @@ public class Track : MonoBehaviour
 
         var values = new float[Checkpoints.Length];
         for (var i = 0; i < Checkpoints.Length; i++) values[i] = Checkpoints[i].Reward;
-
-        Debug.Log("Checkpoint values: " + string.Join(", ", values));
     }
 
     private float CarTrackPercentage(CarController car, ref int checkpoint)
@@ -175,7 +174,7 @@ public class Track : MonoBehaviour
 
         //Calculate distance to next checkpoint
         var checkPointDistance =
-            Vector2.Distance(car.transform.position, Checkpoints[checkpoint + 1].transform.position);
+            Vector3.Distance(car.transform.position, Checkpoints[checkpoint + 1].transform.position);
 
         //Check if checkpoint can be captured
         if (checkPointDistance <= Checkpoints[checkpoint + 1].Radius)

@@ -58,8 +58,6 @@ public class GeneticManager : MonoBehaviour
             LivingAgents++;
             Agents[i].OnAgentDie += AgentDie;
         }
-        Debug.Log("Got LivingAgents: " + LivingAgents);
-
         Track.Instance.Restart();
     }
 
