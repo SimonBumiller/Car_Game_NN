@@ -47,7 +47,6 @@ public class Track : MonoBehaviour
         var startTransform = StartCar.transform;
         startPos = startTransform.position;
         startRot = startTransform.rotation;
-        Debug.Log("Got start pos: " + startPos.ToString());
 
         Instance = this;
     }

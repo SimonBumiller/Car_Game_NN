@@ -44,9 +44,9 @@ public class CarController : MonoBehaviour
 
         SensorRayDirections = new Vector3[5];
         SensorRayDirections[0] = new Vector3(-1, 0, 0); //Forward
-        SensorRayDirections[1] = new Vector3(1, 0, 1); //Forward - Left
+        SensorRayDirections[1] = new Vector3(-1, 0, 1); //Forward - Left
         SensorRayDirections[2] = new Vector3(0, 0, 1); //Left
-        SensorRayDirections[3] = new Vector3(1, 0, -1); //Forward - Right
+        SensorRayDirections[3] = new Vector3(-1, 0, -1); //Forward - Right
         SensorRayDirections[4] = new Vector3(0, 0, -1); //Right
     }
 

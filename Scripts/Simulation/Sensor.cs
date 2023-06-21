@@ -31,7 +31,6 @@ public class Sensor : MonoBehaviour
 
     private void FixedUpdate()
     {
-        //Debug.Log("Will fire a raycast into direction " + RayDirection.ToString());
         var result = Physics.Raycast(new Ray(transform.position, RayDirection), out var hit, 999999F, LayerToSense.value);
         if (result)
         {

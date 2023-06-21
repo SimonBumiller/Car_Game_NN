@@ -31,13 +31,13 @@ public class Checkpoint : MonoBehaviour
 
     public Vector3 Position
     {
-        get => Renderer.transform.position;
-        private set => Renderer.transform.position = value;
+        get => transform.position;
+        private set => transform.position = value;
     }
 
     private void Awake()
     {
-        Renderer = GetComponent<SpriteRenderer>();
+        transform.localScale = new Vector3(2 * Radius, transform.localScale.y, 2 * Radius);
     }
 
     public float GetPartOfReward(float currentDistance)

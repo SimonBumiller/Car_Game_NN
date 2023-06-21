@@ -14,6 +14,7 @@ public class GeneticManager : MonoBehaviour
 
     public GeneticAlgorithm GeneticAlgorithm;
     public int LivingAgents;
+    public int Iteration;
 
     private void Awake()
     {
@@ -30,10 +31,10 @@ public class GeneticManager : MonoBehaviour
         GeneticAlgorithm = new GeneticAlgorithm(CarNumber, net.WeightCount)
         {
             Select = GeneticSelection.Default.Select,
-            Crossover = GeneticCrossover.Default
-                .Crossover, //Setting up evolutionary parameters. Should be handled via user inputs.
+            Crossover = GeneticCrossover.Default.Crossover,
             Mutate = GeneticMutation.Default.Mutate
         };
+        Iteration = 1;
         GeneticAlgorithm.Race += StartRace;
 
         AllCarsDead += GeneticAlgorithm.Evolution;
@@ -66,5 +67,11 @@ public class GeneticManager : MonoBehaviour
         LivingAgents--;
 
         if (LivingAgents == 0) GeneticAlgorithm.Evolution();
+    }
+
+    public void Reset()
+    {
+        Iteration = Iteration + 1;
+        StartEvolution();
     }
 }

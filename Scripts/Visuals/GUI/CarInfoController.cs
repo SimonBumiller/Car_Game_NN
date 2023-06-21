@@ -16,6 +16,7 @@ public class CarInfoController : MonoBehaviour
 
     void Update()
     {
+        if (Car is null) return;
         var acceleration = Movement.AccelerationHelper.from((float)Car.Movement.horizontalInput);
         var speed = Movement.Speedhelper.from(Car.Movement.Velocity, CarMovement.MaxVel, -CarMovement.MaxVel);
         var aText = Movement.nameFor(acceleration);

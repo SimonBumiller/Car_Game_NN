@@ -28,6 +28,8 @@ public class CarGame : MonoBehaviour
 
     private void OnBestCarChange(CarController controller)
     {
+        var controllerNull = controller is null;
+        if(controllerNull) return;
         Camera.target = controller.transform;
         CarInfoController.Instance.Car = controller;
     }
