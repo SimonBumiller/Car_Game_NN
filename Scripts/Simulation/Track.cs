@@ -103,6 +103,7 @@ public class Track : MonoBehaviour
 
     public void CreateCars(int amount)
     {
+        StartCar.gameObject.SetActive(true);
         if (amount == Cars.Count || amount < 0) return;
 
         if (amount > Cars.Count)
@@ -131,6 +132,7 @@ public class Track : MonoBehaviour
                 Destroy(last.Controller.gameObject);
             }
         }
+        StartCar.gameObject.SetActive(false);
     }
 
     private void OnCarDie(CarController car)
@@ -169,7 +171,7 @@ public class Track : MonoBehaviour
 
     private float CarTrackPercentage(CarController car, ref int checkpoint)
     {
-        if (checkpoint >= Checkpoints.Length) return 1; //Car is finished
+        if (checkpoint >= Checkpoints.Length - 1) return 1; //Car is finished
 
         //Calculate distance to next checkpoint
         var checkPointDistance =
@@ -184,8 +186,16 @@ public class Track : MonoBehaviour
         }
 
         //Return accumulated reward of last checkpoint + reward of distance to next checkpoint
-        return Checkpoints[checkpoint].TotalReward +
-               Checkpoints[checkpoint + 1].GetPartOfReward(checkPointDistance);
+        var total = Checkpoints[checkpoint].Reward;
+        var part = Checkpoints[checkpoint + 1].GetPartOfReward(checkPointDistance) - total;
+        var all = total + part;
+                                   
+        if (all > 1)
+        {
+            Debug.Log("Returning value bigger than 1 for car = " + car.Agent + ": " + all + " with total = " + total + " and part = " + part);
+        }
+
+        return all;
     }
 
     /// <summary>

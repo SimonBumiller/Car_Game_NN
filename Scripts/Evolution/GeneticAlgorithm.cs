@@ -38,13 +38,18 @@ public class GeneticAlgorithm
         Generation = 1;
     }
 
-    public event Action<List<Genotype>> Race;
+    public event Action<List<Genotype>, int> Race;
+    
+    /// <summary>
+    /// Callback to be called shortly before the evolutionary process is started with the population.
+    /// </summary>
+    public event Action<List<Genotype>> PreEvolution; 
 
     public void Start()
     {
         FillGenotypeWeights();
 
-        Race(Population);
+        Race(Population, Generation);
     }
 
     /// <summary>
@@ -52,7 +57,9 @@ public class GeneticAlgorithm
     /// </summary>
     public void Evolution()
     {
+        
         GeneticFitnessFunction.Default.Fitness(Population); //Calculate Fitness
+        if (PreEvolution != null) PreEvolution(Population);
 
         Population.Sort();
 
@@ -62,8 +69,12 @@ public class GeneticAlgorithm
 
         Population = mutatedGen;
         ++Generation;
+        if (Generation == 5)
+        {
+            
+        }
 
-        if (Race != null) Race(Population);
+        if (Race != null) Race(Population, Generation);
     }
 
     private void FillGenotypeWeights()

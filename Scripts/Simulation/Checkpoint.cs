@@ -13,7 +13,7 @@ public class Checkpoint : MonoBehaviour
     public float Reward;
 
     /// <summary>
-    ///     The total reward that have been received when this checkpoint is triggered.
+    ///     The total reward that has been received when this checkpoint is triggered.
     /// </summary>
     public float TotalReward;
 
